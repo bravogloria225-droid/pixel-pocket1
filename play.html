@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Pixel Pocket - Play</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; height: 100%; background: #000; color: #f4f4f4; font-family: "Press Start 2P", ui-monospace, monospace; overflow: hidden; }
+  .bar { position: fixed; top: 0; left: 0; right: 0; z-index: 10; display: flex; gap: 10px; align-items: center;
+         padding: calc(env(safe-area-inset-top, 0px) + 6px) 10px 6px; background: #1a1c2c; font-size: 9px; border-bottom: 3px solid #0d0e17; }
+  .bar a { color: #f4f4f4; background: #b13e53; padding: 8px 10px; text-decoration: none; box-shadow: inset -3px -3px 0 rgba(0,0,0,.35); }
+  .bar span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #ffcd75; }
+  #wrap { position: fixed; left: 0; right: 0; bottom: 0; top: calc(env(safe-area-inset-top, 0px) + 44px); }
+  #game { width: 100%; height: 100%; }
+  .msg { padding: 80px 20px; text-align: center; font-size: 10px; line-height: 2; }
+</style>
+</head>
+<body>
+<div class="bar"><a href="index.html#games">&#9664; LIBRARY</a><span id="title">LOADING...</span></div>
+<div id="wrap"><div id="game"></div></div>
+<script>
+(async () => {
+  const id = new URLSearchParams(location.search).get('id');
+  const CORES = { gb: 'gb', gba: 'gba', nes: 'nes', snes: 'snes', segaMD: 'segaMD', psx: 'psx' };
+  const fail = (m) => { document.getElementById('game').innerHTML = '<div class="msg">' + m + '</div>'; };
+
+  function getGame() {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open('pixelpocket', 1);
+      r.onupgradeneeded = () => r.result.createObjectStore('games', { keyPath: 'id' });
+      r.onerror = () => rej(r.error);
+      r.onsuccess = () => {
+        const db = r.result;
+        const st = db.transaction('games', 'readwrite').objectStore('games');
+        const g = st.get(id);
+        g.onsuccess = () => {
+          const rec = g.result;
+          if (rec) { rec.lastPlayed = Date.now(); st.put(rec); }
+          res(rec);
+        };
+        g.onerror = () => rej(g.error);
+      };
+    });
+  }
+
+  let rec;
+  try { rec = await getGame(); } catch (e) { return fail('COULD NOT OPEN STORAGE'); }
+  if (!rec) return fail('GAME NOT FOUND.<br>GO BACK AND ADD IT AGAIN.');
+  document.getElementById('title').textContent = rec.title;
+  document.title = rec.title;
+
+  // numeric id so each game keeps its own settings
+  let hash = 0; for (const c of rec.id) hash = (hash * 31 + c.charCodeAt(0)) | 0;
+
+  window.EJS_player = '#game';
+  window.EJS_core = CORES[rec.system];
+  window.EJS_gameUrl = new File([rec.data], rec.fileName);
+  window.EJS_gameName = rec.title.replace(/[#<$+%>!`&*'|{}/\\?"=@:^\r\n]/g, '');
+  window.EJS_gameID = Math.abs(hash);
+  window.EJS_pathtodata = 'https://cdn.emulatorjs.org/4.2.3/data/';
+  window.EJS_color = '#b13e53';
+  window.EJS_backgroundColor = '#000000';
+  window.EJS_DEBUG_XX = location.hash === '#debug';
+
+  const s = document.createElement('script');
+  s.src = window.EJS_pathtodata + 'loader.js';
+  s.onerror = () => fail('NEED INTERNET THE FIRST TIME<br>TO DOWNLOAD THE EMULATOR.');
+  document.body.appendChild(s);
+})();
+</script>
+</body>
+</html>

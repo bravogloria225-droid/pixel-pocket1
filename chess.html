@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Pixel Pocket - Chess</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1c2c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="chess.css">
+</head>
+<body>
+<header class="top">
+  <div class="logo"><a href="index.html#home" class="back">&#9664;</a> <span class="blink">&#9822;</span> CHESS DOJO</div>
+</header>
+
+<main>
+  <!-- LOBBY -->
+  <section id="lobby" class="view active">
+    <div class="panel" id="resume-box" hidden>
+      <h3>GAME IN PROGRESS</h3>
+      <p class="small" id="resume-text"></p>
+      <button class="btn green" id="resume-btn">RESUME</button>
+      <button class="btn ghost" id="resume-drop">DISCARD</button>
+    </div>
+
+    <div class="panel">
+      <h3>GAME SETTINGS</h3>
+      <p class="small">PLAY AS</p>
+      <div class="seg" id="seg-color">
+        <button data-v="w" class="on">WHITE</button><button data-v="b">BLACK</button><button data-v="r">RANDOM</button>
+      </div>
+      <p class="small">COACH</p>
+      <div class="seg" id="seg-coach">
+        <button data-v="on" class="on">ON</button><button data-v="off">OFF</button>
+      </div>
+      <p class="tiny">With the coach on, every move you make gets graded and explained. You also get hints and take-backs.</p>
+    </div>
+
+    <div class="panel">
+      <h3>PICK YOUR OPPONENT</h3>
+      <p class="tiny">Ratings are rough estimates. Beat each bot to earn a crown.</p>
+    </div>
+    <div id="bot-list"></div>
+
+    <div class="panel">
+      <h3>COACH LESSONS</h3>
+      <div id="lessons"></div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section id="game" class="view">
+    <div class="opp">
+      <div class="avatar" id="opp-face"></div>
+      <div class="opp-meta">
+        <div id="opp-name"></div>
+        <div class="tiny" id="opp-elo"></div>
+      </div>
+      <div class="bubble" id="opp-say"></div>
+    </div>
+
+    <div class="board-wrap">
+      <div class="evalbar" id="evalbar"><div id="eval-fill"></div><span id="eval-num">0.0</span></div>
+      <div class="board" id="board"></div>
+    </div>
+
+    <div class="coach panel" id="coach">
+      <div class="coach-head"><span class="coach-face">&#129417;</span> COACH OWL <span class="grade" id="grade"></span></div>
+      <p class="small" id="coach-text">Your move! Tap a piece, then tap where it should go.</p>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="btn-hint">HINT</button>
+      <button class="btn" id="btn-undo">UNDO</button>
+      <button class="btn ghost" id="btn-flip">FLIP</button>
+      <button class="btn ghost" id="btn-resign">RESIGN</button>
+    </div>
+
+    <div class="panel">
+      <h3>MOVES</h3>
+      <div class="movelist" id="movelist"></div>
+    </div>
+  </section>
+</main>
+
+<!-- promotion picker -->
+<div class="modal" id="promo" hidden>
+  <div class="panel">
+    <h3>PROMOTE TO</h3>
+    <div class="promo-row" id="promo-row"></div>
+  </div>
+</div>
+
+<!-- end of game -->
+<div class="modal" id="end" hidden>
+  <div class="panel">
+    <h3 id="end-title"></h3>
+    <p class="small" id="end-sub"></p>
+    <div id="end-report"></div>
+    <button class="btn green" id="end-again">REMATCH</button>
+    <button class="btn" id="end-review">VIEW BOARD</button>
+    <button class="btn ghost" id="end-lobby">PICK BOT</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="chess-engine.js"></script>
+<script src="chess-ui.js"></script>
+</body>
+</html>

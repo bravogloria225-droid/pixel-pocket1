@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Pixel Pocket</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pixel Pocket">
+<meta name="theme-color" content="#1a1c2c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="logo"><span class="blink">&#9654;</span> PIXEL POCKET</div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section id="view-home" class="view active">
+    <div class="panel hero">
+      <div class="hero-title">PLAYER 1<br>READY</div>
+      <p class="small">Your pocket game console.</p>
+    </div>
+    <div class="grid2">
+      <button class="tile" data-go="games"><span class="ico">&#127918;</span>EMULATOR</button>
+      <button class="tile" data-go="arcade"><span class="ico">&#128126;</span>ARCADE</button>
+      <button class="tile" data-href="chess.html"><span class="ico">&#9822;&#65038;</span>CHESS</button>
+      <button class="tile" data-go="web"><span class="ico">&#127760;</span>WEB</button>
+      <button class="tile wide" id="home-continue"><span class="ico">&#9654;</span>CONTINUE</button>
+    </div>
+    <div class="panel" id="install-hint">
+      <h3>INSTALL ME</h3>
+      <p class="small">In Safari tap <b>Share</b> &#8594; <b>Add to Home Screen</b>. I'll open full screen like a real app.</p>
+    </div>
+  </section>
+
+  <!-- EMULATOR LIBRARY -->
+  <section id="view-games" class="view">
+    <div class="panel">
+      <h3>GAME LIBRARY</h3>
+      <p class="small">Load game files from your iPhone (Files app). Use games you own or free homebrew.</p>
+      <label class="btn big" for="rom-input">+ ADD GAME FILE</label>
+      <input id="rom-input" type="file" multiple hidden>
+      <p class="tiny" id="storage-info"></p>
+    </div>
+    <div class="chips" id="filter-chips"></div>
+    <div id="library"></div>
+    <div class="panel">
+      <h3>SUPPORTED</h3>
+      <ul class="small list">
+        <li><b>GB / GBC</b> .gb .gbc</li>
+        <li><b>GBA</b> .gba</li>
+        <li><b>NES</b> .nes</li>
+        <li><b>SNES</b> .sfc .smc</li>
+        <li><b>GENESIS</b> .md .gen .smd .bin</li>
+        <li><b>PS1</b> .chd .pbp .iso .bin (single file)</li>
+        <li><b>.zip / .7z</b> you'll pick the system</li>
+      </ul>
+      <p class="tiny">PS1 tip: one-file formats (.chd or .pbp) work best. Multi-file .cue + .bin sets won't load.</p>
+    </div>
+  </section>
+
+  <!-- ARCADE -->
+  <section id="view-arcade" class="view">
+    <div class="panel">
+      <h3>ARCADE</h3>
+      <p class="small">Built-in games. No files needed. They work offline too.</p>
+    </div>
+    <div id="arcade-list"></div>
+  </section>
+
+  <!-- WEB -->
+  <section id="view-web" class="view">
+    <div class="panel">
+      <h3>AD BLOCK SETUP</h3>
+      <p class="small">iPhones only let ad blockers run inside Safari or at the network level. A home-screen app can't do it. Do this once and it covers Safari everywhere:</p>
+      <ol class="small list steps">
+        <li>Install <b>AdGuard</b> (free) from the App Store.</li>
+        <li>Open it and turn protection on.</li>
+        <li>Go to <b>Settings &#8594; Apps &#8594; Safari &#8594; Extensions</b>. Turn on every AdGuard item.</li>
+        <li>Done. Links below open in Safari with ads blocked.</li>
+      </ol>
+      <details class="small">
+        <summary>BLOCK ADS IN EVERY APP (optional)</summary>
+        <ol class="list steps">
+          <li>Make a free account at <b>nextdns.io</b>.</li>
+          <li>In <b>Privacy</b>, add the "AdGuard DNS filter" blocklist.</li>
+          <li>In <b>Setup</b>, choose iOS and install the profile it gives you.</li>
+          <li>Approve it in <b>Settings &#8594; General &#8594; VPN &amp; Device Management</b>.</li>
+        </ol>
+        <p class="tiny">No blocker catches 100% of ads, and some sites stop working when they detect one.</p>
+      </details>
+    </div>
+
+    <div class="panel">
+      <h3>FREE ANIME (LEGAL)</h3>
+      <div class="links" id="links-anime"></div>
+    </div>
+
+    <div class="panel">
+      <h3>MY LINKS</h3>
+      <form id="link-form" class="row">
+        <input id="link-name" placeholder="NAME" maxlength="20" autocomplete="off">
+        <input id="link-url" placeholder="https://..." inputmode="url" autocomplete="off">
+        <button class="btn" type="submit">ADD</button>
+      </form>
+      <div class="links" id="links-mine"></div>
+    </div>
+
+    <div class="panel">
+      <h3>FREE GAMES TO EMULATE</h3>
+      <p class="small">Legal homebrew games, made by indie devs for old consoles:</p>
+      <div class="links" id="links-homebrew"></div>
+    </div>
+  </section>
+</main>
+
+<nav class="tabs">
+  <button data-go="home" class="on"><span>&#8962;</span>HOME</button>
+  <button data-go="games"><span>&#127918;</span>EMU</button>
+  <button data-go="arcade"><span>&#128126;</span>ARCADE</button>
+  <button data-href="chess.html"><span>&#9822;&#65038;</span>CHESS</button>
+  <button data-go="web"><span>&#127760;</span>WEB</button>
+</nav>
+
+<!-- System picker modal -->
+<div class="modal" id="sys-modal" hidden>
+  <div class="panel">
+    <h3>WHICH SYSTEM?</h3>
+    <p class="small" id="sys-file"></p>
+    <div class="grid2" id="sys-buttons"></div>
+    <button class="btn ghost" id="sys-cancel">CANCEL</button>
+  </div>
+</div>
+
+<!-- Arcade player -->
+<div class="arcade-screen" id="arcade-screen" hidden>
+  <div class="arcade-top">
+    <button class="btn" id="arcade-exit">&#9664; EXIT</button>
+    <span id="arcade-title"></span>
+    <span id="arcade-score">0</span>
+  </div>
+  <canvas id="arcade-canvas" width="160" height="144"></canvas>
+  <div class="pad">
+    <div class="dpad">
+      <button data-k="up" class="u">&#9650;</button>
+      <button data-k="left" class="l">&#9664;</button>
+      <button data-k="right" class="r">&#9654;</button>
+      <button data-k="down" class="d">&#9660;</button>
+    </div>
+    <button class="abtn" data-k="a">A</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="game-snake.js"></script>
+<script src="game-dodge.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
